@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🕪️ Drowsiness Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f3f4f6;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #222;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .video-section, .log-section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .video-frame {
+            width: 720px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 3px solid #d1d5db;
+            display: block;
+            margin: 0 auto;
+        }
+        .buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .buttons form {
+            display: inline;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .start { background-color: #10b981; color: white; }
+        .stop { background-color: #ef4444; color: white; }
+        .detect { background-color: #3b82f6; color: white; }
+        .status-box {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #fef3c7;
+            border-left: 6px solid #facc15;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        .log-title {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #4b5563;
+        }
+        .logs {
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        .logs code {
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .video-frame {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🛌 Real-Time Drowsiness Detection</h1>
+    <div class="container">
+        <div class="video-section">
+            <img class="video-frame" src="/video_feed" alt="Live Video Feed">
+            <div class="buttons">
+                <form action="/start" method="post"><button class="start">Start 🔴</button></form>
+                <form action="/stop" method="post"><button class="stop">Stop ⏹️</button></form>
+                <form action="/detect" method="post"><button class="detect">Detect 🔍</button></form>
+            </div>
+            <div class="status-box" id="status-text">
+                Current Status: {{ status }}
+            </div>
+        </div>
+        <div class="log-section">
+            <div class="log-title">📅 Today's Logs:</div>
+            <div class="logs">
+                <code>
+                    {% for line in logs %}{{ line }}<br>{% endfor %}
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            fetch('/get_status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status-text').innerText = "Current Status: " + data.status;
+                });
+        }
+        setInterval(updateStatus, 2000); // Refresh every 2 seconds
+    </script>
+</body>
+</html>
