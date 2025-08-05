@@ -1,6 +1,6 @@
 # Drowsiness_Detection_System
 
-🚀 Built by FrameIQ LLP | Updated: August 2025  
+🚀 Built by Mitali under FrameIQ LLP | Updated: August 2025  
 ⚙️ Tech Stack: Flask, OpenCV, MediaPipe, TensorFlow, HTML/CSS
 
 ---
